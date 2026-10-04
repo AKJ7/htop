@@ -462,7 +462,7 @@ static int LinuxProcess_compareByKey(const Process* v1, const Process* v2, Proce
    case TCP_DOWNLOAD_RATE:
       return compareRealNumbers(p1->tcp_rate.download, p2->tcp_rate.download);
    case TCP_UPLOAD_RATE:
-      return compareRealNumbers(p1->tcp_rate.upload, p2->tcp_rate.download);
+      return compareRealNumbers(p1->tcp_rate.upload, p2->tcp_rate.upload);
    default:
       return Process_compareByKey_Base(v1, v2, key);
    }

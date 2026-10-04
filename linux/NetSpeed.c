@@ -220,7 +220,6 @@ static int query_inet_diag(int nl_fd, uint8_t family, uint32_t seq_num) {
     memset(&sa, 0, sizeof(sa));
     sa.nl_family = AF_NETLINK;
     if (sendto(nl_fd, &req, req.nlh.nlmsg_len, 0, (struct sockaddr *) &sa, sizeof(sa)) < 0) {
-        perror("Failed sending diagnostics request payload");
         return -1;
     }
     return 0;
@@ -343,15 +342,9 @@ uint8_t NetSpeed_init(NetMonitoringData *netData) {
     netData->seq = 0;
     return 1u;
 fail:
-    if (netData->networkSpeedMeterData.inode_cache != NULL) {
-        free(netData->networkSpeedMeterData.inode_cache);
-    }
-    if (netData->networkSpeedMeterData.traffic_cache != NULL) {
-        free(netData->networkSpeedMeterData.traffic_cache);
-    }
-    if (netData->networkSpeedMeterData.recvBuffer != NULL) {
-        free(netData->networkSpeedMeterData.recvBuffer);
-    }
+    free(netData->networkSpeedMeterData.inode_cache);
+    free(netData->networkSpeedMeterData.traffic_cache);
+    free(netData->networkSpeedMeterData.recvBuffer);
     return 0u;
 }
 
