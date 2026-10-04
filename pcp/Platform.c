@@ -418,7 +418,7 @@ bool Platform_init(void) {
    sts = pmLookupName(total, pcp->names, pcp->pmids);
    if (sts < 0) {
       fprintf(stderr, "Error: cannot lookup metric names: %s\n", pmErrStr(sts));
-      Platform_done();
+      Platform_done(NULL);
       return false;
    }
 
@@ -428,7 +428,7 @@ bool Platform_init(void) {
          fprintf(stderr, "Error: cannot lookup descriptors: %s\n", pmErrStr(sts));
       else /* ensure we have at least one valid metric to work with */
          fprintf(stderr, "Error: cannot find a single valid metric, exiting\n");
-      Platform_done();
+      Platform_done(NULL);
       return false;
    }
 
@@ -483,7 +483,8 @@ void Platform_dynamicScreensDone(Hashtable* screens) {
    PCPDynamicScreens_done(screens);
 }
 
-void Platform_done(void) {
+void Platform_done(Machine* host) {
+   (void)host;
    pmDestroyContext(pcp->context);
    if (pcp->result)
       pmFreeResult(pcp->result);

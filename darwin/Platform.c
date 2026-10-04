@@ -260,7 +260,8 @@ double Platform_schedulerTicksToNanoseconds(const double scheduler_ticks) {
    return scheduler_ticks * Platform_nanosecondsPerSchedulerTick;
 }
 
-void Platform_done(void) {
+void Platform_done(Machine* host) {
+   (void)host;
    /* no platform-specific cleanup needed */
 }
 

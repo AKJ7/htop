@@ -10,6 +10,7 @@ in the source distribution for its full text.
 #include <stdbool.h>
 #include <stddef.h>
 
+#include "linux/NetSpeed.h"
 #include "Machine.h"
 #include "linux/ZramStats.h"
 #include "linux/ZswapStats.h"
@@ -60,6 +61,12 @@ typedef struct CPUData_ {
    bool online;
 } CPUData;
 
+typedef struct NetMonitoringData_ {
+   int socket;
+   uint32_t seq;
+   NetworkSpeedMeterData networkSpeedMeterData;
+} NetMonitoringData;
+
 typedef struct GPUEngineData_ {
    unsigned long long int prevTime, curTime;  /* absolute GPU time in nano seconds */
    char* key;                                 /* engine name */
@@ -95,6 +102,7 @@ typedef struct LinuxMachine_ {
 
    unsigned long long int prevGpuTime, curGpuTime;  /* total absolute GPU time in nano seconds */
    GPUEngineData* gpuEngineData;
+   NetMonitoringData* netMonitoringData;
 
    ZfsArcStats zfs;
    ZramStats zram;

@@ -90,7 +90,7 @@ bool Running_containerized = false;
 const ScreenDefaults Platform_defaultScreens[] = {
    {
       .name = "Main",
-      .columns = "PID USER PRIORITY NICE M_VIRT M_RESIDENT M_PRIV STATE PERCENT_CPU PERCENT_MEM TIME Command",
+      .columns = "PID USER PRIORITY NICE M_VIRT M_RESIDENT M_PRIV STATE PERCENT_CPU PERCENT_MEM TIME UDP_DOWNLOAD_RATE UDP_UPLOAD_RATE Command",
       .sortKey = "PERCENT_CPU",
    },
    {
@@ -98,6 +98,11 @@ const ScreenDefaults Platform_defaultScreens[] = {
       .columns = "PID USER IO_PRIORITY IO_RATE IO_READ_RATE IO_WRITE_RATE PERCENT_SWAP_DELAY PERCENT_IO_DELAY Command",
       .sortKey = "IO_RATE",
    },
+{
+   .name = "Network Monitor",
+   .columns = "PID USER TCP_UPLOAD_RATE TCP_DOWNLOAD_RATE Command",
+   .sortKey = "TCP_DOWNLOAD_RATE",
+   }
 };
 
 const unsigned int Platform_numberOfDefaultScreens = ARRAYSIZE(Platform_defaultScreens);
@@ -220,14 +225,6 @@ static Htop_Reaction Platform_actionLowerAutogroupPriority(State* st) {
    return changed ? HTOP_REFRESH : HTOP_OK;
 }
 
-void Platform_setBindings(Htop_Action* keys) {
-   keys['i'] = Platform_actionSetIOPriority;
-   keys['{'] = Platform_actionLowerAutogroupPriority;
-   keys['}'] = Platform_actionHigherAutogroupPriority;
-   keys[KEY_F(19)] = Platform_actionLowerAutogroupPriority;  // Shift-F7
-   keys[KEY_F(20)] = Platform_actionHigherAutogroupPriority; // Shift-F8
-}
-
 const MeterClass* const Platform_meterTypes[] = {
    &CPUMeter_class,
    &ClockMeter_class,
@@ -282,6 +279,14 @@ const MeterClass* const Platform_meterTypes[] = {
    &GPUMeter_class,
    NULL
 };
+
+void Platform_setBindings(Htop_Action* keys) {
+   keys['i'] = Platform_actionSetIOPriority;
+   keys['{'] = Platform_actionLowerAutogroupPriority;
+   keys['}'] = Platform_actionHigherAutogroupPriority;
+   keys[KEY_F(19)] = Platform_actionLowerAutogroupPriority;  // Shift-F7
+   keys[KEY_F(20)] = Platform_actionHigherAutogroupPriority; // Shift-F8
+}
 
 int Platform_getUptime(void) {
    char uptimedata[64] = {0};
@@ -1172,8 +1177,10 @@ bool Platform_init(void) {
    return true;
 }
 
-void Platform_done(void) {
+void Platform_done(Machine* host) {
 #ifdef HAVE_SENSORS_SENSORS_H
    LibSensors_cleanup();
 #endif
+   LinuxMachine* linuxMachine = (LinuxMachine*)host;
+   NetSpeed_cleanup(linuxMachine->netMonitoringData);
 }

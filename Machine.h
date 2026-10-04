@@ -18,6 +18,7 @@ in the source distribution for its full text.
 #include "Settings.h"
 #include "Table.h"
 #include "UsersTable.h"
+#include "config.h"
 
 #ifdef HAVE_LIBHWLOC
 #include <hwloc.h>

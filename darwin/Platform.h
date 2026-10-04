@@ -51,7 +51,7 @@ uint64_t Platform_machTicksToNanoseconds(uint64_t mach_ticks);
 // See `sysconf(_SC_CLK_TCK)`, as used to define the `Platform_nanosecondsPerSchedulerTick` constant.
 double Platform_schedulerTicksToNanoseconds(const double scheduler_ticks);
 
-void Platform_done(void);
+void Platform_done(Machine* host);
 
 void Platform_setBindings(Htop_Action* keys);
 

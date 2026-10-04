@@ -49,6 +49,8 @@ in the source distribution for its full text.
    GPU_PERCENT = 133,            \
    ISCONTAINER = 134,            \
    M_EPSS = 135,                 \
+   TCP_UPLOAD_RATE = 136,               \
+   TCP_DOWNLOAD_RATE = 137,               \
    // End of list
 
 

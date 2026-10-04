@@ -150,7 +150,8 @@ bool Platform_init(void) {
    return true;
 }
 
-void Platform_done(void) {
+void Platform_done(Machine* host) {
+   (void)host;
    /* no platform-specific cleanup needed */
 }
 

@@ -497,7 +497,7 @@ int CommandLine_run(int argc, char** argv) {
 
    ScreenManager_run(scr, NULL, NULL, NULL);
 
-   Platform_done();
+   Platform_done(host);
 
    CRT_done();
 

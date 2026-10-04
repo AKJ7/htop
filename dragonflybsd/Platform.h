@@ -45,7 +45,7 @@ extern const MeterClass* const Platform_meterTypes[];
 
 bool Platform_init(void);
 
-void Platform_done(void);
+void Platform_done(Machine* host);
 
 void Platform_setBindings(Htop_Action* keys);
 

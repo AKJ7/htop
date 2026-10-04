@@ -29,6 +29,15 @@ in the source distribution for its full text.
 #define PROCESS_FLAG_LINUX_AUTOGROUP 0x00080000
 #define PROCESS_FLAG_LINUX_GPU       0x00100000
 #define PROCESS_FLAG_LINUX_CONTAINER 0x00200000
+#define PROCESS_FLAG_LINUX_NET_MONITOR 0x00400000
+
+
+struct TransceptionRate {
+   double upload;
+   double download;
+   uint64_t last_updated;
+   size_t generation;
+};
 
 typedef struct LinuxProcess_ {
    Process super;
@@ -110,6 +119,8 @@ typedef struct LinuxProcess_ {
    /* Autogroup scheduling (CFS) information */
    long int autogroup_id;
    int autogroup_nice;
+
+   struct TransceptionRate tcp_rate;
 } LinuxProcess;
 
 extern int pageSize;

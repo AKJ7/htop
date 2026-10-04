@@ -31,6 +31,7 @@ in the source distribution for its full text.
 #include "Hashtable.h"
 #include "Machine.h"
 #include "Macros.h"
+#include "NetSpeed.h"
 #include "Object.h"
 #include "Process.h"
 #include "Row.h"
@@ -1777,6 +1778,10 @@ static bool LinuxProcessTable_recurseProcTree(LinuxProcessTable* this, openat_ar
          } else {
             GPU_readProcessData(this, lp, procFd);
          }
+      }
+
+      if (ss->flags & PROCESS_FLAG_LINUX_NET_MONITOR) {
+         NetSpeed_dirty(lp);
       }
 
       /*

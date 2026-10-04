@@ -25,13 +25,14 @@ in the source distribution for its full text.
 
 #include "CRT.h"
 #include "Macros.h"
-#include "ProcessTable.h"
+#include "NetSpeed.h"
 #include "Row.h"
 #include "Settings.h"
 #include "UsersTable.h"
 
 #include "linux/Compat.h"
 #include "linux/Platform.h" // needed for GNU/hurd to get PATH_MAX  // IWYU pragma: keep
+#include "linux/NetSpeed.h"
 
 #ifdef HAVE_SENSORS_SENSORS_H
 #include "LibSensors.h"
@@ -861,6 +862,10 @@ static void LinuxMachine_scanCPUFrequency(LinuxMachine* this) {
    scanCPUFrequencyFromCPUinfo(this);
 }
 
+static void LinuxMachine_scanNetworkSpeed(LinuxMachine* this) {
+   NetSpeed_monitor(this);
+}
+
 void Machine_scan(Machine* super) {
    LinuxMachine* this = (LinuxMachine*) super;
 
@@ -870,6 +875,7 @@ void Machine_scan(Machine* super) {
    LinuxMachine_scanZfsArcstats(this);
    LinuxMachine_scanZramInfo(this);
    LinuxMachine_scanCPUTime(this);
+   LinuxMachine_scanNetworkSpeed(this);
 
    const Settings* settings = super->settings;
    if (settings->showCPUFrequency

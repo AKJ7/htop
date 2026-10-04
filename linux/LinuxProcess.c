@@ -107,6 +107,8 @@ const ProcessFieldData Process_fields[LAST_PROCESSFIELD] = {
 #endif
    [GPU_TIME] = { .name = "GPU_TIME", .title = "GPU_TIME ", .description = "Total GPU time", .flags = PROCESS_FLAG_LINUX_GPU, .defaultSortDesc = true, },
    [GPU_PERCENT] = { .name = "GPU_PERCENT", .title = " GPU% ", .description = "Percentage of the GPU time the process used in the last sampling", .flags = PROCESS_FLAG_LINUX_GPU, .defaultSortDesc = true, },
+   [TCP_UPLOAD_RATE] = { .name = "TCP_UPLOAD_RATE", .title = " TCP UPLOAD ", .description = "Upload rate of the TCP in seconds", .flags = PROCESS_FLAG_LINUX_NET_MONITOR, .defaultSortDesc = true },
+   [TCP_DOWNLOAD_RATE] = { .name = "TCP_DOWNLOAD_RATE", .title = " TCP DOWNLOAD ", .description = "Download rate of the TCP in seconds", .flags = PROCESS_FLAG_LINUX_NET_MONITOR, .defaultSortDesc = true },
 };
 
 Process* LinuxProcess_new(const Machine* host) {
@@ -355,6 +357,12 @@ static void LinuxProcess_rowWriteField(const Row* super, RichString* str, Proces
          xSnprintf(buffer, n, "N/A  ");
       }
       break;
+      case TCP_DOWNLOAD_RATE:
+         Row_printRate(str, lp->tcp_rate.download, coloring);
+         return;
+      case TCP_UPLOAD_RATE:
+         Row_printRate(str, lp->tcp_rate.upload, coloring);
+         return;
    default:
       Process_writeField(this, str, field);
       return;
@@ -451,6 +459,10 @@ static int LinuxProcess_compareByKey(const Process* v1, const Process* v2, Proce
       return SPACESHIP_NUMBER(p1->gpu_time, p2->gpu_time);
    case ISCONTAINER:
       return SPACESHIP_NUMBER(v1->isRunningInContainer, v2->isRunningInContainer);
+   case TCP_DOWNLOAD_RATE:
+      return compareRealNumbers(p1->tcp_rate.download, p2->tcp_rate.download);
+   case TCP_UPLOAD_RATE:
+      return compareRealNumbers(p1->tcp_rate.upload, p2->tcp_rate.download);
    default:
       return Process_compareByKey_Base(v1, v2, key);
    }

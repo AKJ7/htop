@@ -54,7 +54,7 @@ extern const unsigned int Platform_numberOfMemoryClasses;
 extern const MeterClass* const Platform_meterTypes[];
 
 bool Platform_init(void);
-void Platform_done(void);
+void Platform_done(Machine* host);
 
 extern bool Running_containerized;
 
